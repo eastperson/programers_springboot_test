@@ -1,5 +1,6 @@
 package com.github.prgrms.orders;
 
+import com.github.prgrms.configures.web.Pageable;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
@@ -30,11 +31,17 @@ public class JdbcOrderRepository implements OrderRepository{
     }
 
     @Override
-    public List<Orders> findAll() {
-        return jdbcTemplate.query(
-                "SELECT * FROM orders ORDER BY seq DESC",
+    public List<Orders> findAll(Pageable pageable) {
+
+        //TODO total 로직 구현
+        //int total = jdbcTemplate.queryForObject("select count(*) from orders",Integer.class);
+
+        List<Orders> orders = jdbcTemplate.query(
+                "SELECT * FROM orders ORDER BY seq DESC LIMIT " + pageable.getSize() + " OFFSET " + pageable.getOffset(),
                 mapper
         );
+
+        return orders;
     }
 
     static RowMapper<Orders> mapper = (rs, rowNum) ->

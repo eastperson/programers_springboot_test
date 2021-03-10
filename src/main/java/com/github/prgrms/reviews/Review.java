@@ -47,6 +47,12 @@ public class Review {
         this.createAt = createAt;
     }
 
+    public Review(Long seq){
+        this.seq = seq;
+        this.userSeq = null;
+        this.productSeq = null;
+    }
+
     public Review(Long seq, Long userSeq, Long productSeq, String content, LocalDateTime createAt){
         checkArgument(isNotEmpty(content));
         checkArgument(content.length() >= 1 && content.length() <= 1000,

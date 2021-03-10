@@ -24,6 +24,10 @@ public class ReviewDto {
 
     }
 
+    public ReviewDto(Long seq){
+        this.seq = seq;
+    }
+
     public Long getSeq() {
         return seq;
     }
