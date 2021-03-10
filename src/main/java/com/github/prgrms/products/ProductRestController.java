@@ -1,6 +1,12 @@
 package com.github.prgrms.products;
 
 import com.github.prgrms.errors.NotFoundException;
+import com.github.prgrms.utils.ApiUtils;
+
+import static com.github.prgrms.utils.ApiUtils.error;
+import static com.github.prgrms.utils.ApiUtils.success;
+
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -20,20 +26,22 @@ public class ProductRestController {
         this.productService = productService;
     }
 
-    // FIXME `요건 1` 정의에 맞게 응답 타입 수정이 필요합니다.
     @GetMapping(path = "{id}")
-    public ProductDto findById(@PathVariable Long id) {
-        return productService.findById(id)
-                .map(ProductDto::new)
-                .orElseThrow(() -> new NotFoundException("Could not found product for " + id));
+    public ApiUtils.ApiResult<ProductDto> findById(@PathVariable Long id) {
+        try{
+            return success(productService.findById(id)
+                    .map(ProductDto::new)
+                    .orElseThrow(() -> new NotFoundException("Could not found product for " + id)));
+        } catch (NotFoundException ne){
+            throw new NotFoundException(ne.getMessage(), ne);
+        }
     }
 
-    // FIXME `요건 1` 정의에 맞게 응답 타입 수정이 필요합니다.
     @GetMapping
-    public List<ProductDto> findAll() {
-        return productService.findAll().stream()
-                .map(ProductDto::new)
-                .collect(toList());
+    public ApiUtils.ApiResult<List<ProductDto>> findAll() {
+            return success(productService.findAll().stream()
+                    .map(ProductDto::new)
+                    .collect(toList()));
     }
 
 }
