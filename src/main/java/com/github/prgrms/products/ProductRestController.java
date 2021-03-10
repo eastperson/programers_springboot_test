@@ -1,8 +1,9 @@
 package com.github.prgrms.products;
 
 import com.github.prgrms.errors.NotFoundException;
-import com.github.prgrms.utils.ApiUtils;
 
+
+import static com.github.prgrms.utils.ApiUtils.ApiResult;
 import static com.github.prgrms.utils.ApiUtils.error;
 import static com.github.prgrms.utils.ApiUtils.success;
 
@@ -27,18 +28,15 @@ public class ProductRestController {
     }
 
     @GetMapping(path = "{id}")
-    public ApiUtils.ApiResult<ProductDto> findById(@PathVariable Long id) {
-        try{
+    public ApiResult<ProductDto> findById(@PathVariable Long id) {
             return success(productService.findById(id)
                     .map(ProductDto::new)
                     .orElseThrow(() -> new NotFoundException("Could not found product for " + id)));
-        } catch (NotFoundException ne){
-            throw new NotFoundException(ne.getMessage(), ne);
-        }
+
     }
 
     @GetMapping
-    public ApiUtils.ApiResult<List<ProductDto>> findAll() {
+    public ApiResult<List<ProductDto>> findAll() {
             return success(productService.findAll().stream()
                     .map(ProductDto::new)
                     .collect(toList()));

@@ -166,7 +166,7 @@ curl --request GET 'http://localhost:8080/api/users/me' \
 리뷰 작성이 불가능하다면 `400 오류`를 응답한다.
 
 - 구분: 인증 사용자용 API
-- 구현 컨트롤러: com.github.prgrms.orders.ReviewRestController
+- 구현 컨트롤러: com.github.prgrms.reviews.ReviewRestController
 - 컨트롤러 메소드명: review
 - URL: POST /api/orders/{id}/review
     * {id}: 리뷰를 남기려는 주문의 PK
@@ -195,7 +195,7 @@ curl --request GET 'http://localhost:8080/api/users/me' \
   "success": false,
   "response": null,
   "error": {
-    "message": "Could not write review for order 4 because have already written",
+    "message": "Could not write review for orders 4 because have already written",
     "status": 400
   }
 }
@@ -206,7 +206,7 @@ curl --request GET 'http://localhost:8080/api/users/me' \
   "success": false,
   "response": null,
   "error": {
-    "message": "Could not write review for order 1 because state(REQUESTED) is not allowed",
+    "message": "Could not write review for orders 1 because state(REQUESTED) is not allowed",
     "status": 400
   }
 }

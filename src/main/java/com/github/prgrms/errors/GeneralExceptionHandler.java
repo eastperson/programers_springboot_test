@@ -47,6 +47,16 @@ public class GeneralExceptionHandler {
         return newResponse(e, HttpStatus.UNAUTHORIZED);
     }
 
+    @ExceptionHandler(AlreadyExistException.class)
+    public ResponseEntity<?> handleAlreadyExistException(Exception e) {
+        return newResponse(e, HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(NotAllowedStateException.class)
+    public ResponseEntity<?> handleNotAllowedStateException(Exception e) {
+        return newResponse(e, HttpStatus.BAD_REQUEST);
+    }
+
     @ExceptionHandler({
             IllegalArgumentException.class,
             IllegalStateException.class,

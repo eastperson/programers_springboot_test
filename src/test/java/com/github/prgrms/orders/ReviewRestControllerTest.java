@@ -2,6 +2,7 @@ package com.github.prgrms.orders;
 
 import com.github.prgrms.configures.JwtTokenConfigure;
 import com.github.prgrms.products.ProductRestController;
+import com.github.prgrms.reviews.ReviewRestController;
 import com.github.prgrms.security.WithMockJwtAuthentication;
 import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -85,7 +86,7 @@ class ReviewRestControllerTest {
     @DisplayName("리뷰 작성 실패 테스트 (리뷰 작성 불가 상태)")
     void reviewFailureTest3() throws Exception {
         ResultActions result = mockMvc.perform(
-                post("/api/orders/1/review")
+                post("/api/orders/5/review")
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON)
                         .content("{\"content\":\"this is review content!\"}")

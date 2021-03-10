@@ -87,6 +87,10 @@ public class Product {
         return createAt;
     }
 
+    public void addReviewCount(){
+        reviewCount += 1;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
