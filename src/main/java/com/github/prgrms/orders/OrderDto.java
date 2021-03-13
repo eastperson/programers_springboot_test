@@ -103,4 +103,19 @@ public class OrderDto {
     public void setCreateAt(LocalDateTime createAt) {
         this.createAt = createAt;
     }
+
+    @Override
+    public String toString() {
+        return "OrderDto{" +
+                "seq=" + seq +
+                ", productId=" + productId +
+                ", review=" + review +
+                ", state='" + state + '\'' +
+                ", requestMessage='" + requestMessage + '\'' +
+                ", rejectMessage='" + rejectMessage + '\'' +
+                ", completedAt=" + completedAt +
+                ", rejectedAt=" + rejectedAt +
+                ", createAt=" + createAt +
+                '}';
+    }
 }

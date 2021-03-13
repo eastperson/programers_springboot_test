@@ -33,15 +33,11 @@ public class SimplePageRequestHandlerMethodArgumentResolver implements HandlerMe
             WebDataBinderFactory binderFactory
     ) {
 
-        System.out.println("=================================resolve 사용중");
-
         String offsetString = webRequest.getParameter(offsetParameterName);
         String sizeString = webRequest.getParameter(sizeParameterName);
 
         long offset = DEFAULT_OFFSET;
         int size = DEFAULT_SIZE;
-
-        System.out.println("default size : "+size);
 
         if(offsetString != null){
             offset = Long.parseLong(offsetString);
@@ -49,7 +45,6 @@ public class SimplePageRequestHandlerMethodArgumentResolver implements HandlerMe
 
         if(sizeString != null) {
             size = Integer.parseInt(sizeString);
-            System.out.println("size string : "+size);
         }
 
         if(offset < 1 || Long.MAX_VALUE < offset){
@@ -58,7 +53,6 @@ public class SimplePageRequestHandlerMethodArgumentResolver implements HandlerMe
 
         if(size < 1 || 5 < size) {
             size = DEFAULT_SIZE;
-            System.out.println("size error : " + size);
         }
 
         return new SimplePageRequest(offset,size);

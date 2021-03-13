@@ -22,6 +22,8 @@ public class ReviewDto {
     public ReviewDto(Review source){
         copyProperties(source,this);
 
+        this.productId = source.getProductSeq();
+
     }
 
     public ReviewDto(Long seq){

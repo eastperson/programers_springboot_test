@@ -57,6 +57,11 @@ public class GeneralExceptionHandler {
         return newResponse(e, HttpStatus.BAD_REQUEST);
     }
 
+    @ExceptionHandler(EmptyRequestBodyException.class)
+    public ResponseEntity<?> handleEmptyRequestBodyException(Exception e) {
+        return newResponse(e, HttpStatus.BAD_REQUEST);
+    }
+
     @ExceptionHandler({
             IllegalArgumentException.class,
             IllegalStateException.class,

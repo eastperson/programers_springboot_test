@@ -1,5 +1,6 @@
 package com.github.prgrms.reviews;
 
+import com.github.prgrms.orders.OrderService;
 import com.github.prgrms.products.ProductService;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -14,10 +15,12 @@ public class ReviewService {
 
     private final ReviewRepository reviewRepository;
     private final ProductService productService;
+    private final OrderService orderService;
 
-    public ReviewService(ReviewRepository reviewRepository,ProductService productService){
+    public ReviewService(ReviewRepository reviewRepository,ProductService productService,OrderService orderService){
         this.reviewRepository = reviewRepository;
         this.productService = productService;
+        this.orderService = orderService;
     }
 
     @Transactional(readOnly = true)
@@ -32,7 +35,7 @@ public class ReviewService {
         return reviewRepository.findAll();
     }
 
-    public Long newReview(Long userSeq, Long productSeq, String content) {
+    public Long newReview(Long userSeq, Long productSeq,Long orderSeq, String content) {
         Review review = new Review.Builder()
                 .userSeq(userSeq)
                 .productSeq(productSeq)
@@ -42,6 +45,7 @@ public class ReviewService {
         Long seq = reviewRepository.save(review);
 
         productService.addReviewCnt(productSeq);
+        orderService.addReview(orderSeq,seq);
 
         return seq;
     }

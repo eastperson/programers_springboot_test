@@ -47,8 +47,6 @@ public class JdbcReviewRepository implements ReviewRepository {
     @Override
     public Long save(Review review) {
 
-        System.out.println("=======================save");
-
         String insertSql = "INSERT INTO reviews(seq,user_seq,product_seq,content,create_at) values (null,?,?,?,?)";
 
         GeneratedKeyHolder keyHolder = new GeneratedKeyHolder();
@@ -63,9 +61,6 @@ public class JdbcReviewRepository implements ReviewRepository {
             ps.setTimestamp(4,timestampOf(review.getCreateAt()));
             return ps;
         }, keyHolder);
-
-        System.out.println("==========================================");
-        System.out.println(keyHolder.getKeys().get(id_column));
 
         Long id = (Long) keyHolder.getKeys().get(id_column);
 

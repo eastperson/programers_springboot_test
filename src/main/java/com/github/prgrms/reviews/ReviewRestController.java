@@ -45,48 +45,25 @@ public class ReviewRestController {
     @PostMapping("/{id}/review")
     public ApiResult<ReviewDto> review(@AuthenticationPrincipal JwtAuthentication authentication, @PathVariable Long id, @Valid @RequestBody ReviewRequest reviewRequest){
 
-        System.out.println("=======================================================");
-        System.out.println("id : " + id);
-        System.out.println("review request : " + reviewRequest);
-
         User user = userService.findById(authentication.id).orElseThrow(() -> new NotFoundException("Could nof found user for " + authentication.id));
-
-        System.out.println("=======================================================");
-        System.out.println("user : " + user);
 
         Orders orders = orderService.findById(id).orElseThrow(() -> new NotFoundException("Could not found order for " + id));
 
-        System.out.println("=======================================================");
-        System.out.println("orders : " + orders);
-
-        if(orders.getState().equals(State.COMPLETED.toString())){
-            // TODO 주문상태가  COMPLETE라면 리뷰를 작성할 수 없다.
-
-            System.out.println("=======================================================");
-            System.out.println("complete 에러!");
+        if(!orders.getState().equals(State.COMPLETED.toString())){
 
             throw new NotAllowedStateException("Could not write review for order 1 because state(REQUESTED) is not allowed");
         }
 
         if(orders.getReviewSeq() > 0) {
-            // TODO 리뷰가 이미 작성되어 있는 경우 리뷰를 작성할 수 없다.
-
-            System.out.println("=======================================================");
-            System.out.println("중복 리뷰 에러!");
 
             throw new AlreadyExistException("Could not write review for order 4 because have already written");
         }
 
-        Long seq = reviewService.newReview(user.getSeq(), orders.getProductSeq(),reviewRequest.getContent());
-
-        System.out.println("=======================================================");
-        System.out.println("생성 seq : " + seq);
+        Long seq = reviewService.newReview(user.getSeq(), orders.getProductSeq(),orders.getSeq(),reviewRequest.getContent());
 
         Optional<Review> result = reviewService.findById(seq);
 
         ReviewDto dto = result.map(ReviewDto::new).orElseThrow(() -> new NotFoundException("Could not found review for " + seq));
-
-        dto.setProductId(result.get().getProductSeq());
 
         return success(dto);
     }

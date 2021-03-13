@@ -5,10 +5,12 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
 import static com.github.prgrms.utils.DateTimeUtils.dateTimeOf;
+import static com.github.prgrms.utils.DateTimeUtils.timestampOf;
 import static java.util.Optional.ofNullable;
 
 @Repository
@@ -33,7 +35,6 @@ public class JdbcOrderRepository implements OrderRepository{
     @Override
     public List<Orders> findAll(Pageable pageable) {
 
-        //TODO total 로직 구현
         //int total = jdbcTemplate.queryForObject("select count(*) from orders",Integer.class);
 
         List<Orders> orders = jdbcTemplate.query(
@@ -42,6 +43,31 @@ public class JdbcOrderRepository implements OrderRepository{
         );
 
         return orders;
+    }
+
+    @Override
+    public void updateStateToAccepted(Long seq) {
+        jdbcTemplate.update("UPDATE orders SET state = ? WHERE seq = ?",State.ACCEPTED.toString(),seq);
+    }
+
+    @Override
+    public void addReview(Long orderSeq, Long reviewSeq) {
+        jdbcTemplate.update("UPDATE orders SET review_seq = ? WHERE seq = ?",reviewSeq,orderSeq);
+    }
+
+    @Override
+    public void updateStateToRejected(Long seq,String rejectMsg) {
+        jdbcTemplate.update("UPDATE orders SET state = ?,reject_msg = ?, rejected_at = ? WHERE seq = ?",State.REJECTED.toString(),rejectMsg, timestampOf(LocalDateTime.now()),seq);
+    }
+
+    @Override
+    public void updateStateToShipping(Long seq) {
+        jdbcTemplate.update("UPDATE orders SET state = ? WHERE seq = ?",State.SHIPPING.toString(),seq);
+    }
+
+    @Override
+    public void updateStateToComplete(Long seq) {
+        jdbcTemplate.update("UPDATE orders SET state = ?, completed_at = ? WHERE seq = ?",State.COMPLETED.toString(),timestampOf(LocalDateTime.now()),seq);
     }
 
     static RowMapper<Orders> mapper = (rs, rowNum) ->

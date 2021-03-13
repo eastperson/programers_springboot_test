@@ -10,4 +10,14 @@ public interface OrderRepository {
     Optional<Orders> findById(long id);
 
     List<Orders> findAll(Pageable pageable);
+
+    void updateStateToAccepted(Long seq);
+
+    void addReview(Long orderSeq, Long reviewSeq);
+
+    void updateStateToRejected(Long seq,String rejectMsg);
+
+    void updateStateToShipping(Long seq);
+
+    void updateStateToComplete(Long seq);
 }
